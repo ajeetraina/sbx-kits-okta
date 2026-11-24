@@ -1,0 +1,46 @@
+# syntax=docker/sandbox-kit:3
+schemaVersion: "3"
+kind: mixin
+displayName: Okta CLI
+description: >-
+  okta, the Okta developer CLI, installed from the official GraalVM-native
+  release. Registers Okta orgs, creates/manages Okta apps, and scaffolds
+  sample integrations from inside a sandbox.
+sourceUrl: https://github.com/okta/okta-cli
+licenses: [Apache-2.0]
+
+# One value drives the install, the provide, the published version and the tag.
+version: "${{ kit.args.version }}"
+
+args:
+  version:
+    default: "0.10.0"
+    pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+    description: Okta CLI release to install (okta-cli-tools-<version>)
+    buildArg: OKTA_VERSION
+
+provides: ["okta@${{ kit.args.version }}"]
+
+# No requires. The overlay ships one self-contained GraalVM-native binary into
+# /usr/local/bin and needs nothing from the composed runtime beyond the §12
+# platform floor (a CA store for TLS, and git — which `okta start` shells out
+# to). Listing deb/ names here would only refuse Alpine/Wolfi/distroless bases
+# that run the static binary perfectly well. The silence is deliberate.
+
+capabilities:
+  # Egress the running agent needs to actually use okta. Install is baked at
+  # docker-build time (see okta.dockerfile), so there is no install phase here.
+  - type: com.docker.sandbox/network-policy@1
+    config:
+      runtime:
+        allow:
+          - start.okta.dev           # Okta CLI API: `okta register` + sample catalog (DEFAULT_CLI_API_URL)
+          - "*.okta.com"             # your Okta org, e.g. dev-123456.okta.com — apps, auth servers, tokens
+          - "*.oktapreview.com"      # Okta preview orgs
+          - github.com               # `okta start` clones the chosen sample app
+          - codeload.github.com      # github clone/archive data plane
+          - raw.githubusercontent.com
+
+  - type: com.docker.sandbox/agent-context@1
+    config:
+      contentFile: ./okta-context.md

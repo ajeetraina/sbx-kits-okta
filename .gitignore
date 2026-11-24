@@ -1,0 +1,7 @@
+# build / conformance artifacts
+/tmp/
+*-layout/
+*-push.json
+
+# os cruft
+.DS_Store
