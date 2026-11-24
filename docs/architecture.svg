@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="700" viewBox="0 0 1180 700" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="allow" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#16A34A"/>
+    </marker>
+    <marker id="deny" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+    <marker id="flow" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1D63ED"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="700" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="40" y="48" font-size="30" font-weight="700" fill="#0F172A">okta — Docker Sandboxes v3 kit</text>
+  <text x="40" y="78" font-size="17" fill="#475569">A <tspan font-weight="600">mixin</tspan> that overlays the Okta CLI onto any sandbox agent, with egress gated by the sbx proxy.</text>
+
+  <!-- ===================== Sandbox microVM ===================== -->
+  <rect x="40" y="110" width="440" height="520" rx="16" fill="#F8FAFF" stroke="#1D63ED" stroke-width="2.5"/>
+  <text x="60" y="145" font-size="20" font-weight="700" fill="#1D63ED">Sandbox microVM</text>
+  <rect x="330" y="124" width="130" height="30" rx="15" fill="#1D63ED"/>
+  <text x="395" y="144" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">linux/amd64</text>
+
+  <!-- Workload -->
+  <rect x="62" y="168" width="396" height="92" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="80" y="196" font-size="16" font-weight="700" fill="#0F172A">Workload (kind: workload)</text>
+  <text x="80" y="221" font-size="15" fill="#334155">AI coding agent — e.g. Claude Code</text>
+  <text x="80" y="245" font-size="13" fill="#64748B">owns entrypoint · user agent (uid 1000) · PATH</text>
+
+  <!-- Mixin overlay -->
+  <rect x="62" y="276" width="396" height="150" rx="12" fill="#EEF4FF" stroke="#1D63ED" stroke-width="1.5"/>
+  <text x="80" y="304" font-size="16" font-weight="700" fill="#00297A">okta mixin  (this kit)</text>
+  <text x="80" y="330" font-size="14" fill="#1E293B">• overlay binary → <tspan font-family="monospace" fill="#0F172A">/usr/local/bin/okta</tspan></text>
+  <text x="80" y="354" font-size="14" fill="#1E293B">  self-contained GraalVM-native, SHA-256 pinned</text>
+  <text x="80" y="378" font-size="14" fill="#1E293B">• provides <tspan font-family="monospace" fill="#0F172A">okta@0.10.0</tspan></text>
+  <text x="80" y="402" font-size="14" fill="#1E293B">• agent-context@1 → <tspan font-family="monospace" fill="#0F172A">okta-context.md</tspan></text>
+
+  <!-- Auth -->
+  <rect x="62" y="442" width="396" height="168" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="80" y="470" font-size="16" font-weight="700" fill="#0F172A">Authentication (no injected credential)</text>
+  <text x="80" y="496" font-size="13.5" fill="#334155">An Okta org is a per-user subdomain, so no fixed</text>
+  <text x="80" y="515" font-size="13.5" fill="#334155">inject domain exists. Authenticate one of two ways:</text>
+  <text x="80" y="545" font-size="14" fill="#0F172A">A. env — <tspan font-family="monospace" font-size="13">OKTA_CLIENT_ORGURL</tspan></text>
+  <text x="80" y="565" font-size="14" fill="#0F172A">           <tspan font-family="monospace" font-size="13">OKTA_CLIENT_TOKEN</tspan></text>
+  <text x="80" y="592" font-size="14" fill="#0F172A">B. interactive — <tspan font-family="monospace" font-size="13">okta login</tspan></text>
+
+  <!-- ===================== Proxy gate ===================== -->
+  <rect x="540" y="238" width="190" height="264" rx="16" fill="#0B1B3A" stroke="#0B1B3A"/>
+  <text x="635" y="276" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">sbx host proxy</text>
+  <text x="635" y="300" font-size="13" fill="#9FB3D1" text-anchor="middle">unbypassable boundary</text>
+  <line x1="560" y1="314" x2="710" y2="314" stroke="#2B3F63" stroke-width="1"/>
+  <text x="635" y="342" font-size="15" font-weight="700" fill="#60A5FA" text-anchor="middle">network-policy@1</text>
+  <text x="635" y="366" font-size="13" fill="#CBD5E1" text-anchor="middle">runtime phase</text>
+  <text x="635" y="396" font-size="14" font-weight="700" fill="#F87171" text-anchor="middle">deny by default</text>
+  <text x="635" y="430" font-size="12.5" fill="#9FB3D1" text-anchor="middle">6 allow · 0 deny</text>
+  <text x="635" y="462" font-size="12" fill="#7E93B5" text-anchor="middle">install baked at build;</text>
+  <text x="635" y="480" font-size="12" fill="#7E93B5" text-anchor="middle">no install-phase egress</text>
+
+  <!-- flow arrow sandbox -> proxy -->
+  <path d="M480 352 L536 352" stroke="#1D63ED" stroke-width="3" marker-end="url(#flow)" fill="none"/>
+  <text x="508" y="342" font-size="11" fill="#1D63ED" text-anchor="middle">HTTPS</text>
+
+  <!-- ===================== Allowed hosts ===================== -->
+  <rect x="790" y="130" width="350" height="300" rx="16" fill="#F0FDF4" stroke="#16A34A" stroke-width="2"/>
+  <text x="810" y="162" font-size="18" font-weight="700" fill="#15803D">Allowed egress (runtime)</text>
+
+  <rect x="810" y="178" width="310" height="66" rx="10" fill="#FFFFFF" stroke="#BBF7D0"/>
+  <text x="826" y="202" font-size="14" font-weight="700" fill="#0F172A" font-family="monospace">start.okta.dev</text>
+  <text x="826" y="226" font-size="12.5" fill="#475569">okta register + sample catalog API</text>
+
+  <rect x="810" y="252" width="310" height="66" rx="10" fill="#FFFFFF" stroke="#BBF7D0"/>
+  <text x="826" y="276" font-size="14" font-weight="700" fill="#0F172A" font-family="monospace">*.okta.com · *.oktapreview.com</text>
+  <text x="826" y="300" font-size="12.5" fill="#475569">your org — apps, auth servers, tokens</text>
+
+  <rect x="810" y="326" width="310" height="86" rx="10" fill="#FFFFFF" stroke="#BBF7D0"/>
+  <text x="826" y="350" font-size="14" font-weight="700" fill="#0F172A" font-family="monospace">github.com · codeload</text>
+  <text x="826" y="372" font-size="14" font-weight="700" fill="#0F172A" font-family="monospace">raw.githubusercontent.com</text>
+  <text x="826" y="396" font-size="12.5" fill="#475569">okta start clones the chosen sample</text>
+
+  <!-- allow arrow proxy -> hosts -->
+  <path d="M730 300 C 760 280, 765 260, 788 250" stroke="#16A34A" stroke-width="3" marker-end="url(#allow)" fill="none"/>
+  <text x="762" y="248" font-size="12" font-weight="700" fill="#16A34A" text-anchor="middle">allow</text>
+
+  <!-- ===================== Denied ===================== -->
+  <rect x="790" y="452" width="350" height="76" rx="16" fill="#FEF2F2" stroke="#DC2626" stroke-width="2"/>
+  <text x="810" y="482" font-size="16" font-weight="700" fill="#B91C1C">Everything else</text>
+  <text x="810" y="508" font-size="13" fill="#7F1D1D">refused at the proxy — surfaced as a 403</text>
+
+  <!-- deny arrow proxy -> denied -->
+  <path d="M730 450 C 762 470, 765 482, 788 486" stroke="#DC2626" stroke-width="3" marker-end="url(#deny)" fill="none" stroke-dasharray="7 5"/>
+  <text x="762" y="500" font-size="12" font-weight="700" fill="#DC2626" text-anchor="middle">deny</text>
+
+  <!-- Footer -->
+  <text x="40" y="668" font-size="13" fill="#64748B">Build: docker buildx (SHA-256 pinned, amd64)  ·  Verify: kit-tck 18/18  ·  Compose: sbx run --kit ./okta &lt;workload&gt;</text>
+  <text x="790" y="668" font-size="13" fill="#94A3B8">github.com/ajeetraina/sbx-kits-okta</text>
+</svg>

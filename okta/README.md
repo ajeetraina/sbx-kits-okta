@@ -4,6 +4,8 @@ A **mixin** that adds the [Okta CLI](https://github.com/okta/okta-cli) (`okta`)
 to any sandbox workload. Compose it onto an agent and that agent can register
 Okta orgs, create and manage OIDC/SAML apps, and scaffold sample integrations.
 
+![okta kit architecture](../docs/architecture.png)
+
 | | |
 |---|---|
 | Kind | `mixin` |
